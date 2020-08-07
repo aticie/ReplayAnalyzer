@@ -53,9 +53,28 @@ float hitobject::get_length() const
 	return length_;
 }
 
+auto hitobject::get_color() const -> sf::Color
+{
+	return color_;
+}
+
 void hitobject::set_count(const int c)
 {
 	count_ = c;
+}
+
+auto hitobject::set_color_by_hit_time(const hit_event event, const float od) -> void
+{
+	const auto hit_diff = abs(this->get_time() - event.hit_time);
+	if (hit_diff < (160 - 12 * od) / 2.f)
+		color_ = sf::Color(255, 255, 255, 155);
+	else if(hit_diff < (280 - 16 * od) / 2.f)
+		color_ = sf::Color(3, 255, 58, 155);
+	else if(hit_diff < (400 - 20 * od) / 2.f)
+		color_ = sf::Color(183, 212, 13, 155);
+	else
+		color_ = sf::Color(255, 0, 0, 155);
+	
 }
 
 int hitobject::get_count() const

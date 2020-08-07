@@ -3,11 +3,11 @@
 #define OSU_PARSER_REPLAY_UTILS_H
 
 #include <vector>
+#include "replay.h"
 #include "replay_frame.h"
-#include "../utils/string_utils.h"
 #include "../utils/math_helpers.h"
 
-std::vector<replay_frame> parse_replay_raw_content(const std::string& replay_contents);
+void parse_replay_raw_content(const std::string& replay_contents, replay& replay);
 std::string get_raw_replay_data_from_osrp(const std::string& file_path);
 int get_frame_index(std::vector<replay_frame> v, replay_frame k);
 std::vector<replay_frame> get_frames_subarray(std::vector<replay_frame> frames,

@@ -1,6 +1,7 @@
 #include "replay_utils.h"
-#include "replay.h"
 #include <sstream>
+
+#include "../utils/string_utils.h"
 
 auto get_raw_replay_data_from_osrp(const std::string& file_path) -> std::string
 {
@@ -32,45 +33,49 @@ std::string serialize_replay_frames_to_raw_text(std::vector<replay_frame> frames
 	return replay_contents_ss.str();
 }
 
-std::vector<replay_frame> parse_replay_raw_content(const std::string& replay_contents)
+auto parse_replay_raw_content(const std::string& replay_contents, replay& replay) -> void
 {
-	std::vector<replay_frame> replay_frames;
 	std::stringstream replay_contents_ss(replay_contents);
 	std::string str;
 	const std::string delimiter = "|";
 
-	replay_frame rng_frame;
 	int64_t abs_time = 0;
+	auto prev_frame = replay_frame(0, 0, sf::Vector2f(0, 0), 0);
 
 	while (std::getline(replay_contents_ss, str, ','))
 	{
 		auto str_vec = splitString(str, delimiter);
-
 		if (str_vec.size() < 4) break; // If we're reading garbage, break
+		
+		abs_time += stoi(str_vec[0]);
+		auto this_frame = replay_frame(stoi(str_vec[0]), abs_time,
+			sf::Vector2f(stof(str_vec[1]), stof(str_vec[2])),
+			stoi(str_vec[3]));
 
-		if (stod(str_vec[0]) == -12345)
+		if (this_frame.get_rel_time() == -12345)
 		{
-			rng_frame = replay_frame(stoi(str_vec[0]), -12345, sf::Vector2f(stof(str_vec[1]), stof(str_vec[2])),
-			                             stoi(str_vec[3])); // Rng frame, save it at the end
-			replay_frames.emplace_back(stoi(str_vec[0]), abs_time,
+			replay.frames.emplace_back(stoi(str_vec[0]), abs_time,
 			                           sf::Vector2f(stof(str_vec[1]), stof(str_vec[2])),
 			                           stoi(str_vec[3]));
 		}
 		else
-			abs_time += stoi(str_vec[0]);
+			replay.frames.emplace_back(this_frame);
 
-		replay_frames.emplace_back(stoi(str_vec[0]), abs_time,
-		                           sf::Vector2f(stof(str_vec[1]), stof(str_vec[2])),
-		                           stoi(str_vec[3]));
+		if ((this_frame.get_key_state() ^ prev_frame.get_key_state()) != 0)
+		{
+			const auto k1_pressed = ((this_frame.get_key_state() & 5) == 5) & ((prev_frame.get_key_state() & 5) == 0);
+			const auto k2_pressed = ((this_frame.get_key_state() & 10) == 10) & ((prev_frame.get_key_state() & 10) == 0);
+			if (k1_pressed)
+				replay.hit_events.emplace_back(this_frame.get_abs_time(), 1);
+			if (k2_pressed)
+				replay.hit_events.emplace_back(this_frame.get_abs_time(), 2);
+		}
+		prev_frame = this_frame;
 	}
-
-	replay_frames.push_back(rng_frame);
-
-	return replay_frames;
 }
 
 
-//  Finds the nearest frame to the mouse position on screeen
+//  Finds the nearest frame to the mouse position on screen
 int find_nearest_frame(const std::vector<replay_frame>& frames_subarray,
                        const sf::Vector2f mouse_local_position)
 {

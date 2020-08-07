@@ -3,7 +3,6 @@
 #include "../utils/LEB128.h"
 #include "LZMA.h"
 #include <cassert>
-#include <utility>
 
 auto replay::is_hardrock() const -> bool
 {
@@ -20,8 +19,8 @@ replay::replay(const std::string& replay_path)
 	if (!replay_file.is_open())
 	{
 		is_initialized = false;
-		replay_frame dummy(0, 0, sf::Vector2f(256, 256), 0);
-		frames_.push_back(dummy);
+		const replay_frame dummy(0, 0, sf::Vector2f(256, 256), 0);
+		frames.push_back(dummy);
 		return;
 	}
 	is_initialized = true;
@@ -57,13 +56,71 @@ replay::replay(const std::string& replay_path)
 	lzma::decompress_stream_data(&stream);
 
 	// Parse frames
-	frames_ = parse_replay_raw_content(reinterpret_cast<char*>(stream.out_data));
+	parse_replay_raw_content(reinterpret_cast<char*>(stream.out_data), *this);
 }
 
 replay::replay()
 {
 	is_initialized = false;
 }
+
+replay::replay(const replay& other_replay)
+{	
+	frames = other_replay.frames;
+	hit_events = other_replay.hit_events;
+	game_mode_ = other_replay.game_mode_;
+	game_version_ = other_replay.game_version_;
+	beatmap_md5_hash_ = other_replay.beatmap_md5_hash_;
+	player_name_ = other_replay.player_name_;
+	replay_md5_hash_= other_replay.replay_md5_hash_;
+	count_300_= other_replay.count_300_;
+	count_100_= other_replay.count_100_;
+	count_50_= other_replay.count_50_;
+	count_geki_= other_replay.count_geki_;
+	count_katu_= other_replay.count_katu_;
+	count_miss_= other_replay.count_miss_;
+	total_score_= other_replay.total_score_;
+	greatest_combo_= other_replay.greatest_combo_;
+	perfect_= other_replay.perfect_;
+	mods_= other_replay.mods_;
+	life_bar_graph_= other_replay.life_bar_graph_;
+	time_stamp_= other_replay.time_stamp_;
+	compressed_data_length_= other_replay.compressed_data_length_;
+	compressed_data_= other_replay.compressed_data_;
+	online_score_id_= other_replay.online_score_id_;
+}
+
+replay& replay::operator=(const replay& other_replay)
+{
+	if (this == &other_replay)
+		return *this;
+	
+	frames = other_replay.frames;
+	hit_events = other_replay.hit_events;
+	game_mode_ = other_replay.game_mode_;
+	game_version_ = other_replay.game_version_;
+	beatmap_md5_hash_ = other_replay.beatmap_md5_hash_;
+	player_name_ = other_replay.player_name_;
+	replay_md5_hash_ = other_replay.replay_md5_hash_;
+	count_300_ = other_replay.count_300_;
+	count_100_ = other_replay.count_100_;
+	count_50_ = other_replay.count_50_;
+	count_geki_ = other_replay.count_geki_;
+	count_katu_ = other_replay.count_katu_;
+	count_miss_ = other_replay.count_miss_;
+	total_score_ = other_replay.total_score_;
+	greatest_combo_ = other_replay.greatest_combo_;
+	perfect_ = other_replay.perfect_;
+	mods_ = other_replay.mods_;
+	life_bar_graph_ = other_replay.life_bar_graph_;
+	time_stamp_ = other_replay.time_stamp_;
+	compressed_data_length_ = other_replay.compressed_data_length_;
+	compressed_data_ = other_replay.compressed_data_;
+	online_score_id_ = other_replay.online_score_id_;
+	
+	return *this;
+}
+
 
 void replay::save_to_file(const std::string& save_file_path)
 {
@@ -86,7 +143,7 @@ void replay::save_to_file(const std::string& save_file_path)
 	write_osu_string(replay_file, this->life_bar_graph_);
 	replay_file.write(reinterpret_cast<char*>(&this->time_stamp_), sizeof(long long));
 
-	const auto uncompressed_data = serialize_replay_frames_to_raw_text(frames_);
+	const auto uncompressed_data = serialize_replay_frames_to_raw_text(frames);
 	lzma::data_stream stream;
 	stream.in_data = reinterpret_cast<const unsigned char*>(uncompressed_data.c_str());
 	stream.in_len = uncompressed_data.size();
@@ -103,14 +160,9 @@ void replay::save_to_file(const std::string& save_file_path)
 	replay_file.write(reinterpret_cast<char*>(&this->online_score_id_), sizeof(long long));
 }
 
-void replay::set_replay_frames(std::vector<replay_frame> frames)
-{
-	frames_ = std::move(frames);
-}
-
 std::vector<replay_frame>* replay::get_replay_frames()
 {
-	return &frames_;
+	return &frames;
 }
 
 replay::~replay() = default;

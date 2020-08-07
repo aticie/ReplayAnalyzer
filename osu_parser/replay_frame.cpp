@@ -8,7 +8,7 @@ replay_frame::replay_frame()
 	key_state_ = 0;
 }
 
-replay_frame::replay_frame(const int64_t abs_time, const int64_t rel_time, const sf::Vector2f mouse_pos, const int key_state)
+replay_frame::replay_frame(const int64_t rel_time, const int64_t abs_time, const sf::Vector2f mouse_pos, const int key_state)
 {
 	abs_time_ = abs_time;
 	rel_time_ = rel_time;

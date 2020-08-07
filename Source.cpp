@@ -83,7 +83,6 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	sf::View play_area_view(sf::FloatRect(0.f, 0.f, 800.f, 600.f));
 	play_area_view.setViewport(sf::FloatRect(0.f, 0.f, 0.66f, 1.f));
 	play_area_view.setCenter(400, 300);
-	//main_transform.translate(main_transform.transformPoint(sf::Vector2f(144, 108)));
 	play_area_view.move(-144, -108);
 
 	sf::RectangleShape play_area_rectangle(sf::Vector2f(790, 590)); // Draw a 800x600 rectangle indicating play area
@@ -397,11 +396,11 @@ auto draw_beatmap_objects(sf::RenderWindow& window, beatmap* beatmap, int64_t cu
 {
 	float length = 0;
 	auto const od = beatmap->overall_diff;
-
 	auto* frames = replay.get_replay_frames();
 
-	for (auto const& hitobj : beatmap->hitobjects)
+	for (auto& hitobj : beatmap->hitobjects)
 	{
+
 		if ((hitobj.get_type() & 2) == 2)
 		{
 			length = hitobj.get_length();
@@ -411,6 +410,11 @@ auto draw_beatmap_objects(sf::RenderWindow& window, beatmap* beatmap, int64_t cu
 		if (hitobj.get_time() > current_time + hitobject_trails[0] && hitobj.get_time() < current_time +
 			hitobject_trails[1] + length)
 		{
+
+			auto hitobj_time = hitobj.get_time();
+			auto closest_hit = find_closest(replay.hit_events, hitobj_time);
+			hitobj.set_color_by_hit_time(closest_hit, od);
+			
 			if ((hitobj.get_type() & 2) == 2)
 			{
 				if (hitobj.curve_points.getVertexCount() > 3)
@@ -418,6 +422,7 @@ auto draw_beatmap_objects(sf::RenderWindow& window, beatmap* beatmap, int64_t cu
 					draw_bezier_curve(hitobj.curve_points, sf::Color::White, window);
 				}
 			}
+			hitobject.setOutlineColor(hitobj.get_color());
 			hitobject.setPosition(hitobj.get_pos());
 			text.setPosition(hitobj.get_pos());
 			auto hitobj_num = std::to_string(hitobj.get_count());
@@ -489,13 +494,13 @@ void draw_frames_subarray(sf::RenderWindow& window, std::vector<replay_frame>& f
 		key_state_to_array(frames_subarray[j + 1].get_key_state(), next_key_states);
 
 		if (cur_key_states[2] && cur_key_states[3])
-			frame_point_color = sf::Color(177.f, 0.f, 132.f, 255.f);
+			frame_point_color = sf::Color(177, 0, 132, 255);
 		else if (cur_key_states[2] && !cur_key_states[3])
-			frame_point_color = sf::Color(199.f, 0.f, 57.f, 255.f);
+			frame_point_color = sf::Color(199, 0, 57, 255);
 		else if (!cur_key_states[2] && cur_key_states[3])
-			frame_point_color = sf::Color(0.f, 191.f, 255.f, 255.f);
+			frame_point_color = sf::Color(0, 191, 255, 255);
 		else
-			frame_point_color = sf::Color(25.f, 25.f, 25.f, 255.f);
+			frame_point_color = sf::Color(25, 25, 25, 255);
 
 		auto line = draw_line_from_two_points(cur_mouse_pos, next_mouse_pos);
 

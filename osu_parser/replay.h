@@ -7,23 +7,36 @@
 #include <filesystem>
 #include "replay_frame.h"
 
+struct hit_event
+{
+	int64_t hit_time;
+	int key_no;
+	hit_event(const int64_t abs_time, const int key_num)
+		: hit_time(abs_time), key_no(key_num){}
+};
+
 class replay
 {
 public:
+	std::vector<replay_frame> frames;
+	std::vector<hit_event> hit_events;
+	
 	explicit replay(const std::string& replay_path);
 	explicit replay();
+
+	replay(const replay&);
+	replay& operator=(const replay&);
 	
 	bool is_initialized = false;
 	static auto read_osu_string(std::ifstream& replay_file) -> std::string;
 	[[nodiscard]] auto get_beatmap_md5() const -> std::string;
 	static auto write_osu_string(std::ofstream& replay_file, const std::string&) -> void;
-	auto set_replay_frames(std::vector<replay_frame> frames) -> void;
 	auto save_to_file(const std::string&) -> void;
 	[[nodiscard]] auto is_hardrock() const -> bool;
 	auto get_replay_frames() -> std::vector<replay_frame>*;
+	
 	~replay();
 private:
-	std::vector<replay_frame> frames_;
 	uint8_t game_mode_{};
 	int game_version_{};
 	std::string beatmap_md5_hash_;

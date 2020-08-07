@@ -28,7 +28,7 @@ public:
 
 	// Constructor
 	replay_frame();
-	replay_frame(int64_t abs_time, int64_t rel_time, sf::Vector2f mouse_pos, int key_state);
+	replay_frame(int64_t rel_time, int64_t abs_time, sf::Vector2f mouse_pos, int key_state);
 
 	// Destructor
 	~replay_frame() = default;
