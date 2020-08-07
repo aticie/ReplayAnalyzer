@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_draw.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_widgets.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui-SFML.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_demo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\math_helpers.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\draw_helpers.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="osu_parser\replay_frame.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="osu_parser\replay_utils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="utils\string_utils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="osu_parser\replay.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="osu_parser\LZMA.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="osu_parser\Beatmap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="osu_parser\hitobject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="osu_parser\osu_database.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="utils\math_helpers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\draw_helpers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="osu_parser\replay_frame.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="osu_parser\replay_utils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="osu_parser\replay.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\LEB128.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="osu_parser\LZMA.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="osu_parser\Beatmap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="osu_parser\hitobject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utils\string_utils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="osu_parser\osu_path_finder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="osu_parser\osu_database.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
