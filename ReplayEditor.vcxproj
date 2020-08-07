@@ -179,6 +179,9 @@
     <ClInclude Include="utils\math_helpers.h" />
     <ClInclude Include="utils\string_utils.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Font Include="OpenSans-Regular.ttf" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

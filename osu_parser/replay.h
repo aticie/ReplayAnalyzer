@@ -1,47 +1,49 @@
 #pragma once
-#ifndef osu_parser_replay_h
-#define osu_parser_replay_h
+#ifndef OSU_PARSER_REPLAY_H
+#define OSU_PARSER_REPLAY_H
 
 #include <fstream>
 #include <vector>
 #include <filesystem>
 #include "replay_frame.h"
 
-class Replay {
+class replay
+{
 public:
+	explicit replay(const std::string& replay_path);
+	explicit replay();
+	
 	bool is_initialized = false;
-	Replay(std::string replay_path);
-	static std::string read_osu_string(std::ifstream& replay_file);
-	std::string get_beatmap_md5();
-	void write_osu_string(std::ofstream& replay_file, std::string);
-	void set_replay_frames(std::vector<ReplayFrame> frames);
-	void save_to_file(std::string);
-	bool is_hardrock();
-	std::vector<ReplayFrame>* get_replay_frames();
-	~Replay();
+	static auto read_osu_string(std::ifstream& replay_file) -> std::string;
+	[[nodiscard]] auto get_beatmap_md5() const -> std::string;
+	static auto write_osu_string(std::ofstream& replay_file, const std::string&) -> void;
+	auto set_replay_frames(std::vector<replay_frame> frames) -> void;
+	auto save_to_file(const std::string&) -> void;
+	[[nodiscard]] auto is_hardrock() const -> bool;
+	auto get_replay_frames() -> std::vector<replay_frame>*;
+	~replay();
 private:
-	std::vector<ReplayFrame> frames;
-	uint8_t game_mode;
-	int game_version;
-	std::string beatmap_md5_hash;
-	std::string	player_name;
-	std::string	replay_md5_hash;
-	short count_300;
-	short count_100;
-	short count_50;
-	short count_geki;
-	short count_katu;
-	short count_miss;
-	int total_score;
-	short greatest_combo;
-	uint8_t perfect;
-	int mods;
-	std::string life_bar_graph;
-	long long time_stamp;
-	int compressed_data_length;
-	char* compressed_data;
-	long long online_score_id;
+	std::vector<replay_frame> frames_;
+	uint8_t game_mode_{};
+	int game_version_{};
+	std::string beatmap_md5_hash_;
+	std::string player_name_;
+	std::string replay_md5_hash_;
+	short count_300_{};
+	short count_100_{};
+	short count_50_{};
+	short count_geki_{};
+	short count_katu_{};
+	short count_miss_{};
+	int total_score_{};
+	short greatest_combo_{};
+	uint8_t perfect_{};
+	int mods_{};
+	std::string life_bar_graph_;
+	long long time_stamp_{};
+	int compressed_data_length_{};
+	char* compressed_data_{};
+	long long online_score_id_{};
 };
-
 
 #endif // !define osu_parser_replay_h

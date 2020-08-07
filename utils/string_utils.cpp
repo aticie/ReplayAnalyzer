@@ -20,10 +20,12 @@ bool startsWith(const std::string& str, const char* prefix)
 	return startsWith(str, prefix, std::string::traits_type::length(prefix));
 }
 
-std::vector<std::string> splitString(const std::string& str, const std::string& delim) {
+std::vector<std::string> splitString(const std::string& str, const std::string& delim)
+{
 	std::vector<std::string> tokens;
-	size_t prev = 0, pos = 0;
-	do {
+	size_t prev = 0, pos;
+	do
+	{
 		pos = str.find(delim, prev);
 		if (pos == std::string::npos)
 			pos = str.length();
@@ -31,14 +33,17 @@ std::vector<std::string> splitString(const std::string& str, const std::string& 
 		if (!token.empty())
 			tokens.push_back(token);
 		prev = pos + delim.length();
-	} while (pos < str.length() && prev < str.length());
+	}
+	while (pos < str.length() && prev < str.length());
 	return tokens;
 }
 
-std::vector<std::wstring> splitString(const std::wstring& str, const std::wstring& delim) {
+std::vector<std::wstring> splitString(const std::wstring& str, const std::wstring& delim)
+{
 	std::vector<std::wstring> tokens;
-	size_t prev = 0, pos = 0;
-	do {
+	size_t prev = 0, pos;
+	do
+	{
 		pos = str.find(delim, prev);
 		if (pos == std::string::npos)
 			pos = str.length();
@@ -46,6 +51,7 @@ std::vector<std::wstring> splitString(const std::wstring& str, const std::wstrin
 		if (!token.empty())
 			tokens.push_back(token);
 		prev = pos + delim.length();
-	} while (pos < str.length() && prev < str.length());
+	}
+	while (pos < str.length() && prev < str.length());
 	return tokens;
 }

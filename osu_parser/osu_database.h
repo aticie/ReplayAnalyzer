@@ -1,38 +1,37 @@
 #pragma once
-#ifndef osu_parser_osu_database_h
-#define osu_parser_osu_database_h
+#ifndef OSU_PARSER_OSU_DATABASE_H
+#define OSU_PARSER_OSU_DATABASE_H
 
 #include <unordered_map>
 #include "replay.h"
-#include <fstream>
 #include <string>
-#include <vector>
 #include <filesystem>
 
-class BeatmapInfo {
+class beatmap_info
+{
 public:
-	BeatmapInfo();
-	std::string get_hash();
+	beatmap_info();
+	[[nodiscard]] std::string get_hash() const;
 	std::string foldername;
 	std::string filename;
 	std::string md5;
 };
 
-class OsuDatabase {
+class osu_database
+{
 public:
-	OsuDatabase(std::wstring);
-	std::unordered_map<std::string, BeatmapInfo> beatmap_mapping;
+	explicit osu_database(const std::wstring&);
+	std::unordered_map<std::string, beatmap_info> beatmap_mapping;
 	bool is_initialized = false;
 private:
-	int osu_version;
-	int folder_count;
-	bool account_unlocked;
-	long long date_to_unlock;
-	std::string player_name;
-	int nr_beatmaps;
-	int user_permissions;
+	int osu_version_{};
+	int folder_count_{};
+	bool account_unlocked_{};
+	long long date_to_unlock_{};
+	std::string player_name_;
+	int nr_beatmaps_{};
 };
 
-BeatmapInfo parse_beatmap(std::ifstream&);
+beatmap_info parse_beatmap(std::ifstream&);
 
 #endif // !osu_parser_osu_db_parser_h
